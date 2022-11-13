@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import Banner from "./components/Banner";
+import Header from "./components/Header";
+import { Card } from "@mui/material";
+import TestingComponent from "./TestingComponent";
+import { useState } from "react";
+import Todo from "./components/Todo";
+
+const initialFormState = {
+  title: "",
+  description: "",
+  deadline: new Date(),
+  priority: "low",
+};
 
 function App() {
+  const [todo, setTodo] = useState([]);
+  const [form, setForm] = useState(initialFormState);
+  const [openDialog, setOpenDialog] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Card>
+      <Banner />
+      <Header />
+      <h1>Hello</h1>
+      <Todo />
+      <TestingComponent />
+    </Card>
   );
 }
 
