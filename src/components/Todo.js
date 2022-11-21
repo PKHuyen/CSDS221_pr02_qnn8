@@ -1,85 +1,60 @@
 import * as React from "react";
-import {Box, Checkbox, Grid} from "@mui/material";
+import {Box, Checkbox, Container, Grid, TableCell, TableRow} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
+import toastr from "toastr";
 
-export default function Todo() {
-    const date = new Date();
+export default function Todo(props) {
+
+    function toggleIsComplete(title) {
+        const newTodos = [...props.todos];
+        const todo = newTodos.find(todo => todo.title === title);
+        todo.isComplete = !todo.isComplete;
+        props.setTodos(newTodos);
+    }
+
+    function updateTodo(title) {
+        // open edit dialog
+        props.setIsAdd(false);
+        props.setOpenDialog(true);
+        // fill the dialog with existed data
+        const newTodos = [...props.todos];
+        const todo = newTodos.find(todo => todo.title === title);
+        props.setForm(todo);
+        // put the todo back to the todos - this will be handled in ToDoDialog
+    }
+
+    function deleteTodo(title) {
+        const newTodos = props.todos.filter(todo => todo.title != title);
+        props.setTodos(newTodos);
+        toastr.success(`Task deleted successfully!`, ``, { 'closeButton': true, positionClass: 'toast-bottom-right' });
+    }
     return (
-        <Box sx={{
-            flexGrow: 1,
-            padding: 2
-        }}>
-            <Grid container spacing={2}>
-                <Grid item xs={2}>
-                    <Typography align="center">
-                        title01
-                    </Typography>
+        <TableRow key={props.title}>
+            <TableCell align='center' sx={{flexWrap: "wrap"}}>{props.title}</TableCell>
+            <TableCell align="center">{props.description}</TableCell>
+            <TableCell align="center">{new Date(props.deadline).toLocaleDateString("en-US")}</TableCell>
+            <TableCell align="center">{props.priority}</TableCell>
+            <TableCell align="center">
+                <Checkbox
+                    checked={props.isComplete}
+                    onChange={() => toggleIsComplete(props.title)}
+                />
+            </TableCell>
+            <TableCell align="center">
+                <Grid container direction="column" sx={{alignItems: 'center'}}>
+                    {!props.isComplete &&
+                        <Button variant="contained" sx={{width: "40%"}} onClick={() => updateTodo(props.title)}>
+                            <EditIcon fontSize="small"/> UPDATE
+                        </Button>
+                    }
+                    <Button variant="contained" color="error" sx={{width: "40%"}} onClick={() => deleteTodo(props.title)}>
+                        <CancelIcon fontSize="small"/> DELETE
+                    </Button>
                 </Grid>
-                <Grid item xs={2}>
-                    <Typography align="center">
-                        description01
-                    </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography align="center">
-                        {date.getMonth()}/{date.getDay()}/{date.getFullYear()}
-                    </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography align="center">
-                        low
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={2}>
-                    <Checkbox
-                        disableRipple={true}
-                        sx={{
-                            display: "flex",
-                            flexDirection: 'column'
-                        }}/>
-                </Grid>
-
-                <Grid item xs={2}>
-                    <Grid
-                        container
-                        direction="column"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <Grid item xs>
-                            {/*TODO: fix button white out when hover*/}
-                            <Button
-                                item
-                                disableTouchRipple={true}
-                                disableFocusRipple={true}
-                                sx={{
-                                    bgcolor: "primary.main",
-                                    color: "white"
-                                }}
-                                startIcon={<EditIcon/>}
-                            >
-                                Update
-                            </Button>
-                        </Grid>
-                        <Grid item xs>
-                            <Button
-                                item
-                                sx={{
-                                    bgcolor: "error.main",
-                                    color: "white"
-                                }}
-                                startIcon={<CancelIcon/>}
-                            >
-                                Delete
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Box>
+            </TableCell>
+        </TableRow>
     );
 }

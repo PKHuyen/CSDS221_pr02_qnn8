@@ -1,43 +1,41 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import {CardHeader} from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-export default function Banner() {
+export default function Banner({setOpenDialog, setIsAdd}) {
     return (
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        align="center"
-                        sx={{flex: 1}}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            color="inherit"
-                        >
-                            <MenuIcon/>
-                        </IconButton>
-                        FRAMEWORKS
-                    </Typography>
-                    <Button
-                        variant="contained"
-                        disableRipple={true}
-                    >
-                        <IconButton
-                            size="small"
-                            color="inherit"
-                        >
-                            <AddCircleIcon fontSize="small" />
-                        </IconButton>
-                        ADD
-                    </Button>
-                </Toolbar>
-            </AppBar>
+        <CardHeader
+            sx={{textAlign: "center", bgcolor: "primary.dark", color: "white"}}
+            title={
+                <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        justifyContent: "center"
+                    }}>
+                    <MenuIcon fontSize="large"/>
+                    <span>FRAMEWORKS</span>
+                </Typography>
+            }
+            action={
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setIsAdd(true);
+                        setOpenDialog(true);
+                    }}
+                    sx={{width: 100, marginRight: '7px'}}
+                >
+                    <AddCircleIcon fontSize="small" sx={{mr:1}}/><Typography>ADD</Typography>
+                </Button>
+            }
+        />
+
     );
 }
