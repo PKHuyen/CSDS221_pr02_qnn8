@@ -20,7 +20,6 @@ import toastr from "toastr";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import EditIcon from '@mui/icons-material/Edit';
-import {DoNotDisturb} from "@mui/icons-material";
 
 const initialFormState = {
     title: "",
@@ -86,6 +85,9 @@ export default function TodoDialog({form, setForm, openDialog, setOpenDialog, to
             toastr.error(`Title must be unique!`, ``, {'closeButton': true, positionClass: 'toast-bottom-right'});
             return false;
         }
+
+        setValidTitle(true);
+        setTextTitle("");
         return true;
     }
 
@@ -96,11 +98,11 @@ export default function TodoDialog({form, setForm, openDialog, setOpenDialog, to
             setTextDescription("Description is required!");
             toastr.error(`Description is empty!`, ``, {'closeButton': true, positionClass: 'toast-bottom-right'});
             return false;
-        } else {
-            setValidDescription(true);
-            setTextDescription("");
-            return true;
         }
+
+        setValidDescription(true);
+        setTextDescription("");
+        return true;
     }
 
     return (
